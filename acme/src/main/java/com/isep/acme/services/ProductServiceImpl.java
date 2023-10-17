@@ -4,6 +4,8 @@ import com.isep.acme.model.Product;
 import com.isep.acme.model.ProductDTO;
 import com.isep.acme.model.ProductDetailDTO;
 import com.isep.acme.repositories.ProductRepository;
+import com.isep.acme.services.sku.ISkuGenerator;
+import com.isep.acme.services.sku.SkuByHashDesignation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class ProductServiceImpl implements ProductService {
 
 //    @Autowired
 //    private IRepository repository;
+
+    @Autowired
+    private ISkuGenerator skuGenerator;
 
     @Override
     public Optional<Product> getProductBySku( final String sku ) {
@@ -73,6 +78,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO create(final Product product) {
+
+        String sku = skuGenerator.createSku(product);
+        System.out.println(sku);
+        
         final Product p = new Product(product.getSku(), product.getDesignation(), product.getDescription());
 
         return repository.save(p).toDto();

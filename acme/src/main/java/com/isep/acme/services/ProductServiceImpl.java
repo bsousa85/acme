@@ -80,9 +80,8 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO create(final Product product) {
 
         String sku = skuGenerator.createSku(product);
-        System.out.println(sku);
         
-        final Product p = new Product(product.getSku(), product.getDesignation(), product.getDescription());
+        final Product p = new Product(sku, product.getDesignation(), product.getDescription());
 
         return repository.save(p).toDto();
     }

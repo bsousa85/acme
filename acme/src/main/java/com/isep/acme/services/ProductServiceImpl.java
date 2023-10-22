@@ -28,7 +28,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Optional<Product> getProductBySku( final String sku ) {
-
         return repository.findBySku(sku);
     }
 
@@ -78,12 +77,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO create(final Product product) {
-
-        String sku = skuGenerator.createSku(product);
+        final Product p;
+        String sku;
+                
+        //Cria o SKU do produto baseado na designação
+        sku = skuGenerator.createSku(product.getDesignation());
         
-        final Product p = new Product(sku, product.getDesignation(), product.getDescription());
+        //Busca producto na Base de dados
+        Optional<Product> productFound = this.getProductBySku(sku);
 
+        //Se o SKU já existir, cria um novo código SKU
+        if(!productFound.isEmpty()){
+            //Recria o SKU
+            sku = skuGenerator.createSku(product.getDesignation() + product.getDescription());
+        }
+        
+        p = new Product(sku, product.getDesignation(), product.getDescription());            
         return repository.save(p).toDto();
+        
+
     }
 
     @Override

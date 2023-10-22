@@ -12,7 +12,7 @@ import com.isep.acme.model.Product;
 public class SkuRandom implements ISkuGenerator{
     
     @Override
-    public String createSku(Product product) {
+    public String createSku(String productInformation) {
 
         final var sku = new StringBuilder();
         final var random = new Random();

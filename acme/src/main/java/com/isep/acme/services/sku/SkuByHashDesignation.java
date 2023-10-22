@@ -14,10 +14,10 @@ import com.isep.acme.model.Product;
 public class SkuByHashDesignation implements ISkuGenerator{
 
     @Override
-    public String createSku(Product product) {
+    public String createSku(String productInformation) {
        try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashBytes = digest.digest(product.getDesignation().getBytes(StandardCharsets.UTF_8));
+            byte[] hashBytes = digest.digest(productInformation.getBytes(StandardCharsets.UTF_8));
             StringBuilder hexString = new StringBuilder();
 
             for (byte hashByte : hashBytes) {
@@ -26,16 +26,16 @@ public class SkuByHashDesignation implements ISkuGenerator{
                 hexString.append(hex);
             }
 
-            return extractMiddle10Characters(hexString.toString());
+            return extractMiddle12Characters(hexString.toString());
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error generating SHA-256 hash", e);
         }
     }
 
-    public static String extractMiddle10Characters(String input) {
+    public static String extractMiddle12Characters(String input) {
         int length = input.length();
-        int start = (length - 10) / 2;  // Starting index for the 10 characters
-        int end = start + 10;  // Ending index for the 10 characters
+        int start = (length - 12) / 2;  // Starting index for the 10 characters
+        int end = start + 12;  // Ending index for the 10 characters
         return input.substring(start, end);
     }
     

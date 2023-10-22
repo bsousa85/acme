@@ -3,6 +3,7 @@ package com.isep.acme.services;
 import com.isep.acme.controllers.ResourceNotFoundException;
 import java.lang.IllegalArgumentException;
 
+import com.isep.acme.services.review.IReviewSorting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     RestService restService;
+
+    @Autowired
+    IReviewSorting reviewSorting;
 
     @Override
     public Iterable<Review> getAll() {
@@ -81,6 +85,8 @@ public class ReviewServiceImpl implements ReviewService {
         if( product.isEmpty() ) return null;
 
         Optional<List<Review>> r = repository.findByProductIdStatus(product.get(), status);
+
+        final var sortedReviews = reviewSorting.sortReviews(r);
 
         if (r.isEmpty()) return null;
 

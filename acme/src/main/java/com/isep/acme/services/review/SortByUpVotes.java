@@ -1,6 +1,8 @@
 package com.isep.acme.services.review;
 
 import com.isep.acme.model.Review;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +16,18 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(name = "review.sort.type", havingValue = "byUpvotes")
 public class SortByUpVotes implements IReviewSorting {
 
-    private int minVotes = 4;
-    private double percentagem = 60; 
+    @Value("${review.sort.minimum_munber.votes}")
+    private int minVotes;
+
+    @Value("${review.sort.minimum_percentage.upVotes}")
+    private double percentagem; 
 
     @Override
     public List<Review> sortReviews(Optional<List<Review>> reviews) {
         
         List<Review> reviewList = reviews.get();
         
-        //Filtra as reviews com mais de 4 votos (upVotes + downVotes) e mais de 60% de UpVotes
+        //Filtra as reviews com pelo menos 4 votos (upVotes + downVotes) e mais de 60% de UpVotes
         List<Review> filteredReviews = reviewList.stream()
         .filter(review -> (review.getUpVote().size() + review.getDownVote().size()) > minVotes)
         .filter(review -> (double) review.getUpVote().size() / (review.getUpVote().size() + review.getDownVote().size()) > (percentagem / 100))

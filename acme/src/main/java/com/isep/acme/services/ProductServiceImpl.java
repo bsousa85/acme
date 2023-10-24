@@ -78,19 +78,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO create(final Product product) {
         final Product p;
-        String sku;
-                
-        //Cria o SKU do produto baseado na designação
-        sku = skuGenerator.createSku(product.getDesignation());
-        
-        //Busca producto na Base de dados
-        Optional<Product> productFound = this.getProductBySku(sku);
-
-        //Se o SKU já existir, cria um novo código SKU
-        if(!productFound.isEmpty()){
-            //Recria o SKU
-            sku = skuGenerator.createSku(product.getDesignation() + product.getDescription());
-        }
+    
+        String sku = skuGenerator.createSku(product.getDesignation());
         
         p = new Product(sku, product.getDesignation(), product.getDescription());            
         return repository.save(p).toDto();

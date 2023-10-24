@@ -26,16 +26,16 @@ public class SkuByHashDesignation implements ISkuGenerator{
                 hexString.append(hex);
             }
 
-            return extractMiddle12Characters(hexString.toString());
+            return extractMiddle10Characters(hexString.toString());
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error generating SHA-256 hash", e);
         }
     }
 
-    public static String extractMiddle12Characters(String input) {
+    public static String extractMiddle10Characters(String input) {
         int length = input.length();
-        int start = (length - 12) / 2;  // Starting index for the 10 characters
-        int end = start + 12;  // Ending index for the 10 characters
+        int start = (length - 10) / 2;  // Starting index for the 10 characters
+        int end = start + 10;  // Ending index for the 10 characters
         return input.substring(start, end);
     }
     

@@ -86,11 +86,11 @@ public class ReviewServiceImpl implements ReviewService {
 
         Optional<List<Review>> r = repository.findByProductIdStatus(product.get(), status);
 
+        if (r.isEmpty()) return null;
+        
         final var sortedReviews = reviewSorting.sortReviews(r);
 
-        if (r.isEmpty()) return null;
-
-        return ReviewMapper.toDtoList(r.get());
+        return ReviewMapper.toDtoList(sortedReviews);
     }
 
     @Override

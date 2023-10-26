@@ -8,7 +8,7 @@ public interface ReviewService {
 
     Iterable<Review> getAll();
 
-    List<ReviewDTO> getReviewsOfProduct(String sku, String status);
+    List<ReviewDTO> getReviewsOfProduct(String sku, String status, Long userId);
 
     ReviewDTO create(CreateReviewDTO createReviewDTO, String sku);
 

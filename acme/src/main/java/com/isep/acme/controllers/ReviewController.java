@@ -22,9 +22,9 @@ class ReviewController {
 
     @Operation(summary = "finds a product through its sku and shows its review by status")
     @GetMapping("/products/{sku}/reviews/{status}")
-    public ResponseEntity<List<ReviewDTO>> findById(@PathVariable(value = "sku") final String sku, @PathVariable(value = "status") final String status) {
+    public ResponseEntity<List<ReviewDTO>> findById(@PathVariable(value = "sku") final String sku, @PathVariable(value = "status") final String status, @PathVariable(value = "userID") final Long userID) {
 
-        final var review = rService.getReviewsOfProduct(sku, status);
+        final var review = rService.getReviewsOfProduct(sku, status, userID);
 
         return ResponseEntity.ok().body( review );
     }

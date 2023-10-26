@@ -23,12 +23,10 @@ public class SortByUpVotes implements IReviewSorting {
     private double percentagem; 
 
     @Override
-    public List<Review> sortReviews(Optional<List<Review>> reviews) {
-        
-        List<Review> reviewList = reviews.get();
-        
+    public List<Review> sortReviews(List<Review> reviews, Long userID) {
+
         //Filtra as reviews com pelo menos 4 votos (upVotes + downVotes) e mais de 60% de UpVotes
-        List<Review> filteredReviews = reviewList.stream()
+        List<Review> filteredReviews = reviews.stream()
         .filter(review -> (review.getUpVote().size() + review.getDownVote().size()) > minVotes)
         .filter(review -> (double) review.getUpVote().size() / (review.getUpVote().size() + review.getDownVote().size()) > (percentagem / 100))
         .collect(Collectors.toList());

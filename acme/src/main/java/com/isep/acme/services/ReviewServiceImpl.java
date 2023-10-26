@@ -79,7 +79,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewDTO> getReviewsOfProduct(String sku, String status) {
+    public List<ReviewDTO> getReviewsOfProduct(String sku, String status, Long userID) {
 
         Optional<Product> product = pRepository.findBySku(sku);
         if( product.isEmpty() ) return null;
@@ -88,7 +88,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         if (r.isEmpty()) return null;
         
-        final var sortedReviews = reviewSorting.sortReviews(r);
+        final var sortedReviews = reviewSorting.sortReviews(r.get(), userID);
 
         return ReviewMapper.toDtoList(sortedReviews);
     }

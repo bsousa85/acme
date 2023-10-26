@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface IReviewSorting {
 
-    List<Review> sortReviews(Optional<List<Review>> reviews);
+    List<Review> sortReviews(List<Review> reviews, Long userID);
 }

@@ -1,11 +1,11 @@
 package com.isep.acme.services;
 
-import com.isep.acme.model.Product;
+import com.isep.acme.model.BaseProduct;
 import com.isep.acme.model.ProductDTO;
 import com.isep.acme.model.ProductDetailDTO;
 import com.isep.acme.repositories.ProductRepository;
+import com.isep.acme.repositories.product.IProductRepository;
 import com.isep.acme.services.sku.ISkuGenerator;
-import com.isep.acme.services.sku.SkuByHashDesignation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,20 +20,20 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository repository;
 
-//    @Autowired
-//    private IRepository repository;
+    @Autowired
+    private IProductRepository iRepository;
 
     @Autowired
     private ISkuGenerator skuGenerator;
 
     @Override
-    public Optional<Product> getProductBySku( final String sku ) {
-        return repository.findBySku(sku);
+    public Optional<BaseProduct> getProductBySku( final String sku ) {
+        return iRepository.findBySku(sku);
     }
 
     @Override
     public Optional<ProductDTO> findBySku(String sku) {
-        final Optional<Product> product = repository.findBySku(sku);
+        final Optional<BaseProduct> product = iRepository.findBySku(sku);
 
         if( product.isEmpty() )
             return Optional.empty();
@@ -44,9 +44,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Iterable<ProductDTO> findByDesignation(final String designation) {
-        Iterable<Product> p = repository.findByDesignation(designation);
-        List<ProductDTO> pDto = new ArrayList();
-        for (Product pd:p) {
+        Iterable<BaseProduct> p = iRepository.findByDesignation(designation);
+        List<ProductDTO> pDto = new ArrayList<>();
+        for (BaseProduct pd : p) {
             pDto.add(pd.toDto());
         }
 
@@ -55,18 +55,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Iterable<ProductDTO> getCatalog() {
-        Iterable<Product> p = repository.findAll();
-        List<ProductDTO> pDto = new ArrayList();
-        for (Product pd:p) {
+        final var p = iRepository.findAll();
+        List<ProductDTO> pDto = new ArrayList<>();
+        for (BaseProduct pd : p) {
             pDto.add(pd.toDto());
         }
-
         return pDto;
     }
 
     public ProductDetailDTO getDetails(String sku) {
 
-        Optional<Product> p = repository.findBySku(sku);
+        Optional<BaseProduct> p = iRepository.findBySku(sku);
 
         if (p.isEmpty())
             return null;
@@ -76,33 +75,32 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductDTO create(final Product product) {
-        final Product p;
+    public ProductDTO create(final BaseProduct product) {
+        final BaseProduct p;
     
         String sku = skuGenerator.createSku(product.getDesignation());
         
-        p = new Product(sku, product.getDesignation(), product.getDescription());            
-        return repository.save(p).toDto();
-        
+        p = new BaseProduct(sku, product.getDesignation(), product.getDescription());
+        return iRepository.save(p).toDto();
 
     }
 
     @Override
-    public ProductDTO updateBySku(String sku, Product product) {
+    public ProductDTO updateBySku(String sku, BaseProduct product) {
         
-        final Optional<Product> productToUpdate = repository.findBySku(sku);
+        final Optional<BaseProduct> productToUpdate = iRepository.findBySku(sku);
 
         if( productToUpdate.isEmpty() ) return null;
 
         productToUpdate.get().updateProduct(product);
 
-        Product productUpdated = repository.save(productToUpdate.get());
+        BaseProduct productUpdated = iRepository.save(productToUpdate.get());
         
         return productUpdated.toDto();
     }
 
     @Override
     public void deleteBySku(String sku) {
-        repository.deleteBySku(sku);
+        iRepository.deleteBySku(sku);
     }
 }

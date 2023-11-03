@@ -1,5 +1,6 @@
 package com.isep.acme.controllers;
 
+import com.isep.acme.model.BaseProduct;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -62,7 +63,7 @@ class ProductController {
     @Operation(summary = "creates a product")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ProductDTO> create(@RequestBody Product manager) {
+    public ResponseEntity<ProductDTO> create(@RequestBody BaseProduct manager) {
         try {
             final ProductDTO product = service.create(manager);
             return new ResponseEntity<ProductDTO>(product, HttpStatus.CREATED);
@@ -74,7 +75,7 @@ class ProductController {
 
     @Operation(summary = "updates a product")
     @PatchMapping(value = "/{sku}")
-    public ResponseEntity<ProductDTO> Update(@PathVariable("sku") final String sku, @RequestBody final Product product) {
+    public ResponseEntity<ProductDTO> Update(@PathVariable("sku") final String sku, @RequestBody final BaseProduct product) {
 
         final ProductDTO productDTO = service.updateBySku(sku, product);
 

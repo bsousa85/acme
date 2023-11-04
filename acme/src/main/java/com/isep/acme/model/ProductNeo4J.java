@@ -1,45 +1,44 @@
 package com.isep.acme.model;
 
+import javax.persistence.Column;
+import javax.persistence.GenerationType;
+
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+@Node
+public class ProductNeo4J {
 
-public class BaseProduct {
-
+    @Id
+    @GeneratedValue
     private Long productID;
 
-    @JsonProperty("sku")
-    private String sku;
-
-    @JsonProperty("designation")
+    public String sku;
     private String designation;
-
-    @JsonProperty("description")
     private String description;
+  
+    
+    protected ProductNeo4J(){}
 
-    public BaseProduct() {}
-
-    public BaseProduct(final Long productID, final String sku) {
+    public ProductNeo4J(final Long productID, final String sku) {
         this.productID = Objects.requireNonNull(productID);
         setSku(sku);
     }
 
-    public BaseProduct(String designation, String description) {
+    public ProductNeo4J(final Long productID, final String sku, final String designation, final String description) { 
+        setProductID(productID);
+        setSku(sku);
         setDescription(description);
         setDesignation(designation);
     }
 
-    public BaseProduct(final Long productID, final String sku, final String designation, final String description) {
-        this(productID, sku);
-        setDescription(description);
-        setDesignation(designation);
-    }
-
-    public BaseProduct(final String sku) {
+    public ProductNeo4J(final String sku) {
         setSku(sku);
     }
 
-    public BaseProduct(final String sku, final String designation, final String description) {
+    public ProductNeo4J(final String sku, final String designation, final String description) {
         this(sku);
         setDescription(description);
         setDesignation(designation);
@@ -88,9 +87,13 @@ public class BaseProduct {
     }
 
 
-    public void updateProduct(BaseProduct p) {
+    public void updateProduct(ProductNeo4J p) {
         setDesignation(p.designation);
         setDescription(p.description);
+    }
+
+    public void setProductID(Long id){
+        this.productID = id;
     }
 
     public Long getProductID() {
@@ -100,4 +103,17 @@ public class BaseProduct {
     public ProductDTO toDto() {
         return new ProductDTO(this.sku, this.designation);
     }
+
+    public BaseProduct toBaseProduct() {
+        return new BaseProduct(this.sku, this.designation, this.description);
+    }
+/*
+    public List<Review> getReview() {
+        return review;
+    }
+
+    public void setReview(List<Review> review) {
+        this.review = review;
+    }
+*/
 }

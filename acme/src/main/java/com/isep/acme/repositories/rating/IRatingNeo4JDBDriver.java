@@ -12,7 +12,7 @@ import com.isep.acme.model.rating.RatingNeo4J;
 
 @Component
 @Profile("neo4j")
-public interface IRatingNeo4JDBDriver extends Neo4jRepository<RatingNeo4J, Long> {
+public interface IRatingNeo4JDBDRiver extends Neo4jRepository<RatingNeo4J, Long> {
     
     @Query("MATCH (r:RatingNeo4J) WHERE r.rate = $rate RETURN r")
     Optional<RatingNeo4J> findByRate(@Param("rate") Double rate);

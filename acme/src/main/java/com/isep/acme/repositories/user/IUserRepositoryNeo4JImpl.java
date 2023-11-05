@@ -18,17 +18,6 @@ public class IUserRepositoryNeo4JImpl implements IUserRepository {
 
     @Override
     public BaseUser save(BaseUser user) {
-        final var username = neo4jdbDriver.findByUsername(user.getUsername());
-        final var nif = neo4jdbDriver.findByNif(user.getNif());
-        
-        if(username != null){
-            throw new ExistingUsernameException("Username already exists!");
-        }
-
-        if(nif != null){
-            throw new ExistingNifException("NIF already exists!");
-        }
-
         final var neo4jUser = new UserNeo4J(user.getUsername(), user.getPassword(), user.getFullName(), user.getNif(), user.getMorada());
         return neo4jdbDriver.save(neo4jUser).toBaseUser();
     }

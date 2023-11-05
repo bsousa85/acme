@@ -2,8 +2,10 @@ package com.isep.acme.model.rating;
 
 import java.util.Objects;
 
+import javax.annotation.Generated;
 import javax.persistence.Version;
 
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
@@ -11,6 +13,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 public class RatingNeo4J {
 
     @Id
+    @GeneratedValue
     private Long idRating;
 
     @Version
@@ -20,8 +23,7 @@ public class RatingNeo4J {
 
     protected RatingNeo4J(){}
 
-    public RatingNeo4J(Long idRating, Long version, Double rate) {
-        this.idRating = Objects.requireNonNull(idRating);
+    public RatingNeo4J(Long version, Double rate) {
         this.version = Objects.requireNonNull(version);
         setRate(rate);
     }

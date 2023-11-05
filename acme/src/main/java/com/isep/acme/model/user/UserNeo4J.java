@@ -20,7 +20,8 @@ public class UserNeo4J implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private Long userId;
+    @GeneratedValue
+    private Long userID;
 
     @Email
     private String username;

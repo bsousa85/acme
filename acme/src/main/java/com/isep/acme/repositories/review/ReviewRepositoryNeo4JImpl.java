@@ -61,7 +61,7 @@ public class ReviewRepositoryNeo4JImpl implements IReviewRepository {
         final var rating = review.getRating();
         final var user = review.getUser();
         final var neo4JProduct = new ProductNeo4J(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
-        final var neo4JRating = new RatingNeo4J(rating.getIdRating(), rating.getVersion(), rating.getRate());
+        final var neo4JRating = new RatingNeo4J(rating.getVersion(), rating.getRate());
         final var neo4JUser = new UserNeo4J(user.getUsername(), user.getPassword(), user.getFullName(), user.getNif(), user.getMorada());
         final var neo4JReview = new ReviewNeo4J(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), neo4JProduct, neo4JRating, neo4JUser);
         return neo4JDBDriver.save(neo4JReview).toBaseReview();
@@ -78,7 +78,7 @@ public class ReviewRepositoryNeo4JImpl implements IReviewRepository {
         final var rating = review.getRating();
         final var user = review.getUser();
         final var neo4JProduct = new ProductNeo4J(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
-        final var neo4JRating = new RatingNeo4J(rating.getIdRating(), rating.getVersion(), rating.getRate());
+        final var neo4JRating = new RatingNeo4J(rating.getVersion(), rating.getRate());
         final var neo4JUser = new UserNeo4J(user.getUsername(), user.getPassword(), user.getFullName(), user.getNif(), user.getMorada());
         final var neo4JReview = new ReviewNeo4J(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), neo4JProduct, neo4JRating, neo4JUser);
         neo4JDBDriver.delete(neo4JReview);

@@ -55,7 +55,6 @@ public class IProductRepositoryNeo4JImpl implements IProductRepository {
 
     @Override
     public List<BaseProduct> findAll() {
-        System.out.println("FINDING ALL IN NEO4J !");
         return neo4JDriver.findAll().stream().map(ProductNeo4J::toBaseProduct).collect(Collectors.toList());
     }
 }

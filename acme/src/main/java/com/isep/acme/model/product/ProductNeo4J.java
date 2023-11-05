@@ -13,6 +13,7 @@ public class ProductNeo4J {
     @GeneratedValue
     private Long productID;
 
+    //Unique -> Uniqueness verified through function
     public String sku;
     private String designation;
     private String description;

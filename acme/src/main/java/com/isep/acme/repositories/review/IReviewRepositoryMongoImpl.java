@@ -7,6 +7,7 @@ import com.isep.acme.model.rating.RatingMongo;
 import com.isep.acme.model.review.BaseReview;
 import com.isep.acme.model.review.ReviewMongo;
 import com.isep.acme.model.user.UserMongo;
+import com.isep.acme.services.SequenceGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,9 @@ public class IReviewRepositoryMongoImpl implements IReviewRepository {
 
     @Autowired
     private IReviewMongoDBDriver mongoDBDriver;
+
+    @Autowired
+    private SequenceGeneratorService sequenceGeneratorService;
 
     @Override
     public Optional<BaseReview> findById(Long reviewID) {
@@ -62,7 +66,7 @@ public class IReviewRepositoryMongoImpl implements IReviewRepository {
         final var mongoProduct = new ProductMongo(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
         final var mongoRating = new RatingMongo(rating.getIdRating(), rating.getVersion(), rating.getRate());
         final var mongoUser = new UserMongo(user.getUsername(), user.getPassword(), user.getFullName(), user.getNif(), user.getMorada());
-        final var mongoReview = new ReviewMongo(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), mongoProduct, mongoRating, mongoUser);
+        final var mongoReview = new ReviewMongo(sequenceGeneratorService.generateSequence(ReviewMongo.REVIEW_SEQUENCE), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), mongoProduct, mongoRating, mongoUser);
         return mongoDBDriver.save(mongoReview).toBaseReview();
     }
 

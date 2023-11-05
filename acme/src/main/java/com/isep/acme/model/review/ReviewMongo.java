@@ -5,6 +5,7 @@ import com.isep.acme.model.User;
 import com.isep.acme.model.Vote;
 import com.isep.acme.model.rating.RatingMongo;
 import com.isep.acme.model.user.UserMongo;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,6 +18,9 @@ import java.util.Objects;
 
 @Document("review")
 public class ReviewMongo {
+
+    @Transient
+    public static final String REVIEW_SEQUENCE = "reviewSequence";
 
     @Id
     private Long idReview;

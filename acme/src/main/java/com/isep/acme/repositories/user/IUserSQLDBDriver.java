@@ -6,10 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @Profile("sql")
 public interface IUserSQLDBDriver extends CrudRepository<UserSQL, Long> {
 
     @Query("SELECT u FROM User u WHERE u.username=:username")
-    UserSQL findByUsername(String username);
+    Optional<UserSQL> findByUsername(String username);
 }

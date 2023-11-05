@@ -4,6 +4,7 @@ import com.isep.acme.model.aggregatedrating.AggregatedRatingMongo;
 import com.isep.acme.model.aggregatedrating.BaseAggregatedRating;
 import com.isep.acme.model.product.BaseProduct;
 import com.isep.acme.model.product.ProductMongo;
+import com.isep.acme.services.SequenceGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,9 @@ public class IAggregatedRatingRepositoryMongoImpl implements IAggregatedRatingRe
     @Autowired
     private IAggregatedRatingMongoDBDriver mongoDBDriver;
 
+    @Autowired
+    private SequenceGeneratorService sequenceGeneratorService;
+
     @Override
     public Optional<BaseAggregatedRating> findByProductId(BaseProduct product) {
         final var mongoProduct = new ProductMongo(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
@@ -27,7 +31,7 @@ public class IAggregatedRatingRepositoryMongoImpl implements IAggregatedRatingRe
     public BaseAggregatedRating save(BaseAggregatedRating aggregatedRating) {
         final var product = aggregatedRating.getProduct();
         final var mongoProduct = new ProductMongo(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
-        final var mongoAggregatedRating = new AggregatedRatingMongo(aggregatedRating.getAverage(), mongoProduct);
+        final var mongoAggregatedRating = new AggregatedRatingMongo(sequenceGeneratorService.generateSequence(AggregatedRatingMongo.AGGREGATED_RATING_SEQUENCE) ,aggregatedRating.getAverage(), mongoProduct);
         return mongoDBDriver.save(mongoAggregatedRating).toBaseAggregatedRating();
     }
 }

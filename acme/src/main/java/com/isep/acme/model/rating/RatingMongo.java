@@ -1,5 +1,6 @@
 package com.isep.acme.model.rating;
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
@@ -8,6 +9,9 @@ import java.util.Objects;
 
 @Document("rating")
 public class RatingMongo {
+
+    @Transient
+    public static final String RATING_SEQUENCE = "ratingSequence";
 
     @Id
     private Long idRating;

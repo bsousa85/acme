@@ -39,7 +39,7 @@ public class IUserRepositoryNeo4JImpl implements IUserRepository {
     }
 
     @Override
-    public BaseUser findByUsername(String username) {
-        return neo4jdbDriver.findByUsername(username).toBaseUser();
+    public Optional<BaseUser> findByUsername(String username) {
+        return neo4jdbDriver.findByUsername(username).map(UserNeo4J::toBaseUser);
     }
 }

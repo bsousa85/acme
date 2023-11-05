@@ -2,6 +2,7 @@ package com.isep.acme.model.image;
 
 import com.isep.acme.model.ImageDTO;
 import com.isep.acme.model.product.ProductMongo;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,6 +11,9 @@ import javax.persistence.Id;
 
 @Document("image")
 public class ImageMongo {
+
+    @Transient
+    public static final String IMAGE_SEQUENCE = "imageSequence";
 
     @Id
     private Long id;

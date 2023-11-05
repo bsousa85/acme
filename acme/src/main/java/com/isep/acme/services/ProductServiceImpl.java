@@ -31,10 +31,7 @@ public class ProductServiceImpl implements ProductService {
     public Optional<ProductDTO> findBySku(String sku) {
         final Optional<BaseProduct> product = repository.findBySku(sku);
 
-        if( product.isEmpty() )
-            return Optional.empty();
-        else
-            return Optional.of( product.get().toDto() );
+        return product.map(BaseProduct::toDto);
     }
 
 

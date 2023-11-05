@@ -27,7 +27,7 @@ public class IUserRepositorySQLImpl implements IUserRepository {
     }
 
     @Override
-    public BaseUser findByUsername(String username) {
-        return sqlDriver.findByUsername(username).toBaseUser();
+    public Optional<BaseUser> findByUsername(String username) {
+        return sqlDriver.findByUsername(username).map(UserSQL::toBaseUser);
     }
 }

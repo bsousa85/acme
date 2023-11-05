@@ -16,7 +16,7 @@ public interface IUserNeo4JDBDriver extends Neo4jRepository<UserNeo4J, Long> {
 
     
     @Query("MATCH (u:UserNeo4J) WHERE u.username =~ $username RETURN u")
-    UserNeo4J findByUsername(@Param("username") String username);
+    Optional<UserNeo4J> findByUsername(@Param("username") String username);
 
     @Query("MATCH (u:UserNeo4J) WHERE u.nif = $nif RETURN u")
     Optional<UserNeo4J> findByNif(@Param("nif") String nif);

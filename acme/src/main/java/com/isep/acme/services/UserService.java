@@ -26,11 +26,11 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final var user = userRepo.findByUsername(username);
 
-        if (user == null) {
+        if (user.isEmpty()) {
             throw new UsernameNotFoundException(String.format("User with username - %s, not found", username));
         }
 
-        return user;
+        return user.get();
     }
 
     public UserView getUser(final Long userId){

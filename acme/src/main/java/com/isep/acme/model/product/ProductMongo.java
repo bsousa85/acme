@@ -1,13 +1,18 @@
 package com.isep.acme.model.product;
 
 import com.isep.acme.model.ProductDTO;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import javax.persistence.Id;
 import java.util.Objects;
 
 @Document("product")
 public class ProductMongo {
+
+    @Transient
+    public static final String PRODUCTS_SEQUENCE = "productsSequence";
 
     @Id
     private Long productID;

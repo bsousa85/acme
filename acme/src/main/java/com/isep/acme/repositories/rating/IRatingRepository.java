@@ -8,4 +8,6 @@ public interface IRatingRepository {
 
     Optional<BaseRating> findByRate(Double rate);
 
+    BaseRating save(BaseRating rating);
+
 }

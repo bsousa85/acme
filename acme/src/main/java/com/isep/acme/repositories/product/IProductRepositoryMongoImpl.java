@@ -2,6 +2,7 @@ package com.isep.acme.repositories.product;
 
 import com.isep.acme.model.product.BaseProduct;
 import com.isep.acme.model.product.ProductMongo;
+import com.isep.acme.services.SequenceGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -17,13 +18,17 @@ public class IProductRepositoryMongoImpl implements IProductRepository {
     @Autowired
     private IProductMongoDBDriver mongoDBDriver;
 
+    @Autowired
+    private SequenceGeneratorService sequenceGeneratorService;
+
     @Override
     public List<BaseProduct> findByDesignation(String designation) {
-        return mongoDBDriver.findAll().stream().map(ProductMongo::toBaseProduct).collect(Collectors.toList());
+        return mongoDBDriver.findByDesignation(designation).stream().map(ProductMongo::toBaseProduct).collect(Collectors.toList());
     }
 
     @Override
     public Optional<BaseProduct> findBySku(String sku) {
+        final var x = mongoDBDriver.findBySku(sku);
         return mongoDBDriver.findBySku(sku).map(ProductMongo::toBaseProduct);
     }
 
@@ -49,7 +54,8 @@ public class IProductRepositoryMongoImpl implements IProductRepository {
 
     @Override
     public BaseProduct save(BaseProduct product) {
-        final var mongoProduct = new ProductMongo(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
+        final var productId = product.getProductID() != null ? product.getProductID() : sequenceGeneratorService.generateSequence(ProductMongo.PRODUCTS_SEQUENCE);
+        final var mongoProduct = new ProductMongo(productId, product.getSku(), product.getDesignation(), product.getDescription());
         return mongoDBDriver.save(mongoProduct).toBaseProduct();
     }
 

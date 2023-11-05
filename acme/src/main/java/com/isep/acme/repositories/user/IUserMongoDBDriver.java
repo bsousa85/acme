@@ -6,10 +6,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @Profile("mongo")
 public interface IUserMongoDBDriver extends MongoRepository<UserMongo, Long> {
 
     @Query("{username: ?0}")
-    UserMongo findByUsername(String username);
+    Optional<UserMongo> findByUsername(String username);
 }

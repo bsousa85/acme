@@ -1,6 +1,7 @@
 package com.isep.acme.model.user;
 
 import com.isep.acme.model.Role;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,9 @@ import java.util.Set;
 
 @Document("user")
 public class UserMongo implements UserDetails {
+
+    @Transient
+    public static final String USER_SEQUENCE = "userSequence";
 
     private static final long serialVersionUID = 1L;
 
@@ -42,6 +46,15 @@ public class UserMongo implements UserDetails {
 
 
     public UserMongo(final String username, final String password, final String fullName, final String nif, final String morada) {
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        setNif(nif);
+        this.morada = morada;
+    }
+
+    public UserMongo(final Long userId, final String username, final String password, final String fullName, final String nif, final String morada) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.fullName = fullName;

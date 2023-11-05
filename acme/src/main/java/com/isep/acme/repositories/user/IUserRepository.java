@@ -33,5 +33,5 @@ public interface IUserRepository {
     }
 
     @Cacheable
-    BaseUser findByUsername(String username);
+    Optional<BaseUser> findByUsername(String username);
 }

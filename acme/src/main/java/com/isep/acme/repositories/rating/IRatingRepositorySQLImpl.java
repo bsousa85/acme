@@ -19,4 +19,10 @@ public class IRatingRepositorySQLImpl implements IRatingRepository {
     public Optional<BaseRating> findByRate(Double rate) {
         return sqlDriver.findByRate(rate).map(RatingSQL::toBaseRating);
     }
+
+    @Override
+    public BaseRating save(BaseRating rating) {
+        final var sqlRating = new RatingSQL(rating.getIdRating(), rating.getVersion(), rating.getRate());
+        return sqlDriver.save(sqlRating).toBaseRating();
+    }
 }

@@ -1,7 +1,7 @@
 package com.isep.acme.repositories.product;
 
-import com.isep.acme.model.BaseProduct;
-import com.isep.acme.model.ProductMongo;
+import com.isep.acme.model.product.BaseProduct;
+import com.isep.acme.model.product.ProductMongo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class IProductRepositoryMongoImpl implements IProductRepository {
 
     @Autowired
-    private IMongoDBDriver mongoDBDriver;
+    private IProductMongoDBDriver mongoDBDriver;
 
     @Override
     public List<BaseProduct> findByDesignation(String designation) {

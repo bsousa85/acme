@@ -1,5 +1,6 @@
 package com.isep.acme.controllers;
 
+import com.isep.acme.model.aggregatedrating.BaseAggregatedRating;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,9 @@ public class AggregatedRatingController {
 
 
     @GetMapping(value = "/{sku}")
-    ResponseEntity<AggregatedRating> getAverage(@PathVariable("sku") final String sku ) {
+    ResponseEntity<BaseAggregatedRating> getAverage(@PathVariable("sku") final String sku ) {
 
-        AggregatedRating a = aService.save(sku);
+        BaseAggregatedRating a = aService.save(sku);
 
         return ResponseEntity.ok().body(a);
     }

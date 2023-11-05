@@ -1,11 +1,10 @@
 package com.isep.acme.services.review;
 
-import com.isep.acme.model.Review;
+import com.isep.acme.model.review.BaseReview;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IReviewSorting {
 
-    List<Review> sortReviews(List<Review> reviews, Long userID);
+    List<BaseReview> sortReviews(List<BaseReview> reviews, Long userID);
 }

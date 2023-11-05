@@ -1,12 +1,11 @@
 package com.isep.acme.services;
 
+import com.isep.acme.model.aggregatedrating.BaseAggregatedRating;
+import com.isep.acme.model.product.BaseProduct;
+import com.isep.acme.repositories.aggregatedrating.IAggregatedRatingRepository;
+import com.isep.acme.repositories.product.IProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.isep.acme.model.AggregatedRating;
-import com.isep.acme.model.Product;
-import com.isep.acme.repositories.AggregatedRatingRepository;
-import com.isep.acme.repositories.ProductRepository;
 
 import java.util.Optional;
 
@@ -14,10 +13,10 @@ import java.util.Optional;
 public class AggregatedRatingServiceImpl implements AggregatedRatingService{
 
     @Autowired
-    AggregatedRatingRepository arRepository;
+    IAggregatedRatingRepository arRepository;
 
     @Autowired
-    private ProductRepository pRepository;
+    private IProductRepository pRepository;
 
     @Autowired
     ReviewService rService;
@@ -26,9 +25,9 @@ public class AggregatedRatingServiceImpl implements AggregatedRatingService{
     ProductService productService;
 
     @Override
-    public AggregatedRating save( String sku ) {
+    public BaseAggregatedRating save( String sku ) {
 
-        Optional<Product> product = pRepository.findBySku( sku );
+        Optional<BaseProduct> product = pRepository.findBySku( sku );
 
         if (product.isEmpty()){
             return null;
@@ -37,15 +36,15 @@ public class AggregatedRatingServiceImpl implements AggregatedRatingService{
         Double average = rService.getWeightedAverage(product.get());
 
 
-        Optional<AggregatedRating> r = arRepository.findByProductId(product.get());
-        AggregatedRating aggregateF;
+        Optional<BaseAggregatedRating> r = arRepository.findByProductId(product.get());
+        BaseAggregatedRating aggregateF;
 
         if(r.isPresent()) {
             r.get().setAverage( average );
             aggregateF = arRepository.save(r.get());
         }
         else {
-            AggregatedRating f = new AggregatedRating(average, product.get());
+            BaseAggregatedRating f = new BaseAggregatedRating(average, product.get());
             aggregateF = arRepository.save(f);
         }
 

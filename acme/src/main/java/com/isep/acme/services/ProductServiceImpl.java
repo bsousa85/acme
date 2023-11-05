@@ -1,6 +1,6 @@
 package com.isep.acme.services;
 
-import com.isep.acme.model.BaseProduct;
+import com.isep.acme.model.product.BaseProduct;
 import com.isep.acme.model.ProductDTO;
 import com.isep.acme.model.ProductDetailDTO;
 import com.isep.acme.repositories.ProductRepository;

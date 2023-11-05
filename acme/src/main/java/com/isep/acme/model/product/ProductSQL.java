@@ -1,40 +1,47 @@
-package com.isep.acme.model;
+package com.isep.acme.model.product;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.isep.acme.model.ProductDTO;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
-@Document("product")
-public class ProductMongo {
+@Entity
+public class ProductSQL {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long productID;
 
+    @Column(nullable = false, unique = true)
     public String sku;
 
+    @Column(nullable = false)
     private String designation;
 
+    @Column(nullable = false)
     private String description;
+    /*
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<Review> review = new ArrayList<Review>(); */
 
-    protected ProductMongo(){}
+    protected ProductSQL(){}
 
-    public ProductMongo(final Long productID, final String sku) {
+    public ProductSQL(final Long productID, final String sku) {
         this.productID = Objects.requireNonNull(productID);
         setSku(sku);
     }
 
-    public ProductMongo(final Long productID, final String sku, final String designation, final String description) {
+    public ProductSQL(final Long productID, final String sku, final String designation, final String description) {
         this(productID, sku);
         setDescription(description);
         setDesignation(designation);
     }
 
-    public ProductMongo(final String sku) {
+    public ProductSQL(final String sku) {
         setSku(sku);
     }
 
-    public ProductMongo(final String sku, final String designation, final String description) {
+    public ProductSQL(final String sku, final String designation, final String description) {
         this(sku);
         setDescription(description);
         setDesignation(designation);
@@ -83,7 +90,7 @@ public class ProductMongo {
     }
 
 
-    public void updateProduct(ProductMongo p) {
+    public void updateProduct(ProductSQL p) {
         setDesignation(p.designation);
         setDescription(p.description);
     }
@@ -99,8 +106,6 @@ public class ProductMongo {
     public BaseProduct toBaseProduct() {
         return new BaseProduct(this.productID, this.sku, this.designation, this.description);
     }
-
-
 /*
     public List<Review> getReview() {
         return review;

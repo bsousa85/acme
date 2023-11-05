@@ -1,8 +1,8 @@
 package com.isep.acme.services;
 
-import com.isep.acme.model.AggregatedRating;
+import com.isep.acme.model.aggregatedrating.BaseAggregatedRating;
 
 public interface AggregatedRatingService {
 
-    AggregatedRating save(String sku);
+    BaseAggregatedRating save(String sku);
 }

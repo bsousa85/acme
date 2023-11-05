@@ -1,7 +1,7 @@
 package com.isep.acme.repositories.product;
 
-import com.isep.acme.model.BaseProduct;
-import com.isep.acme.model.ProductSQL;
+import com.isep.acme.model.product.BaseProduct;
+import com.isep.acme.model.product.ProductSQL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class IProductRepositorySQLImpl implements IProductRepository {
 
     @Autowired
-    private ISQLDriver sqlDriver;
+    private IProductSQLDriver sqlDriver;
 
     @Override
     public List<BaseProduct> findByDesignation(String designation) {

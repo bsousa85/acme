@@ -1,45 +1,42 @@
-package com.isep.acme.model;
+package com.isep.acme.model.product;
 
-import javax.persistence.*;
+import com.isep.acme.model.ProductDTO;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
 import java.util.Objects;
 
-@Entity
-public class ProductSQL {
+@Node
+public class ProductNeo4J {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long productID;
 
-    @Column(nullable = false, unique = true)
     public String sku;
-
-    @Column(nullable = false)
     private String designation;
-
-    @Column(nullable = false)
     private String description;
-    /*
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<Review> review = new ArrayList<Review>(); */
+  
+    
+    protected ProductNeo4J(){}
 
-    protected ProductSQL(){}
-
-    public ProductSQL(final Long productID, final String sku) {
+    public ProductNeo4J(final Long productID, final String sku) {
         this.productID = Objects.requireNonNull(productID);
         setSku(sku);
     }
 
-    public ProductSQL(final Long productID, final String sku, final String designation, final String description) {
-        this(productID, sku);
+    public ProductNeo4J(final Long productID, final String sku, final String designation, final String description) { 
+        setProductID(productID);
+        setSku(sku);
         setDescription(description);
         setDesignation(designation);
     }
 
-    public ProductSQL(final String sku) {
+    public ProductNeo4J(final String sku) {
         setSku(sku);
     }
 
-    public ProductSQL(final String sku, final String designation, final String description) {
+    public ProductNeo4J(final String sku, final String designation, final String description) {
         this(sku);
         setDescription(description);
         setDesignation(designation);
@@ -88,9 +85,13 @@ public class ProductSQL {
     }
 
 
-    public void updateProduct(ProductSQL p) {
+    public void updateProduct(ProductNeo4J p) {
         setDesignation(p.designation);
         setDescription(p.description);
+    }
+
+    public void setProductID(Long id){
+        this.productID = id;
     }
 
     public Long getProductID() {
@@ -102,7 +103,7 @@ public class ProductSQL {
     }
 
     public BaseProduct toBaseProduct() {
-        return new BaseProduct(this.productID, this.sku, this.designation, this.description);
+        return new BaseProduct(this.sku, this.designation, this.description);
     }
 /*
     public List<Review> getReview() {
@@ -113,5 +114,4 @@ public class ProductSQL {
         this.review = review;
     }
 */
-
 }

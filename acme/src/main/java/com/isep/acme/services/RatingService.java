@@ -2,9 +2,9 @@ package com.isep.acme.services;
 
 import java.util.Optional;
 
-import com.isep.acme.model.Rating;
+import com.isep.acme.model.rating.BaseRating;
 
 public interface RatingService {
 
-    Optional<Rating> findByRate(Double rate);
+    Optional<BaseRating> findByRate(Double rate);
 }

@@ -1,7 +1,7 @@
 package com.isep.acme.services.review;
 
-import com.isep.acme.model.Review;
 import com.isep.acme.model.Vote;
+import com.isep.acme.model.review.BaseReview;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(name = "review.sort.type", havingValue = "byUserVotes")
 public class SortByUserVotes implements IReviewSorting {
     @Override
-    public List<Review> sortReviews(List<Review> reviews, Long userID) {
+    public List<BaseReview> sortReviews(List<BaseReview> reviews, Long userID) {
 
         if (reviews.isEmpty()) {
             return List.of();
@@ -28,7 +28,7 @@ public class SortByUserVotes implements IReviewSorting {
         var myVotes = 0;
 
         /// checks which users vote same as I did
-        for (Review review : reviews) {
+        for (BaseReview review : reviews) {
 
             final var userUpVoted = review.getUpVote().stream().anyMatch(c -> c.getUserID().equals(userID));
 
@@ -75,10 +75,10 @@ public class SortByUserVotes implements IReviewSorting {
         return userList;
     }
 
-    private List<Review> fillAndSortReviews(List<Review> reviews, List<Long> userList) {
-        final var filteredReviews = new ArrayList<Review>();
+    private List<BaseReview> fillAndSortReviews(List<BaseReview> reviews, List<Long> userList) {
+        final var filteredReviews = new ArrayList<BaseReview>();
 
-        for (Review review : reviews) {
+        for (BaseReview review : reviews) {
             if (review.getUpVote().stream().anyMatch(vote -> userList.contains(vote.getUserID())) || review.getDownVote().stream().anyMatch(vote -> userList.contains(vote.getUserID()))) {
                 filteredReviews.add(review);
             }

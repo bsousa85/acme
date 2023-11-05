@@ -1,8 +1,9 @@
-package com.isep.acme.model;
+package com.isep.acme.model.product;
 
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.isep.acme.model.ProductDTO;
 
 public class BaseProduct {
 

@@ -3,14 +3,17 @@ package com.isep.acme.services;
 import com.isep.acme.controllers.ResourceNotFoundException;
 import java.lang.IllegalArgumentException;
 
+import com.isep.acme.model.product.BaseProduct;
+import com.isep.acme.model.rating.BaseRating;
+import com.isep.acme.model.review.BaseReview;
+import com.isep.acme.repositories.product.IProductRepository;
+import com.isep.acme.repositories.review.IReviewRepository;
 import com.isep.acme.services.review.IReviewSorting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.isep.acme.model.*;
 
-import com.isep.acme.repositories.ReviewRepository;
-import com.isep.acme.repositories.ProductRepository;
 import com.isep.acme.repositories.UserRepository;
 
 import java.time.LocalDate;
@@ -21,10 +24,10 @@ import java.util.Optional;
 public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
-    ReviewRepository repository;
+    IReviewRepository repository;
 
     @Autowired
-    ProductRepository pRepository;
+    IProductRepository pRepository;
 
     @Autowired
     UserRepository uRepository;
@@ -42,14 +45,14 @@ public class ReviewServiceImpl implements ReviewService {
     IReviewSorting reviewSorting;
 
     @Override
-    public Iterable<Review> getAll() {
+    public Iterable<BaseReview> getAll() {
         return repository.findAll();
     }
 
     @Override
     public ReviewDTO create(final CreateReviewDTO createReviewDTO, String sku) {
 
-        final Optional<Product> product = pRepository.findBySku(sku);
+        final Optional<BaseProduct> product = pRepository.findBySku(sku);
 
         if(product.isEmpty()) return null;
 
@@ -57,8 +60,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         if(user.isEmpty()) return null;
 
-        Rating rating = null;
-        Optional<Rating> r = ratingService.findByRate(createReviewDTO.getRating());
+        BaseRating rating = null;
+        Optional<BaseRating> r = ratingService.findByRate(createReviewDTO.getRating());
         if(r.isPresent()) {
             rating = r.get();
         }
@@ -69,7 +72,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         if (funfact == null) return null;
 
-        Review review = new Review(createReviewDTO.getReviewText(), date, product.get(), funfact, rating, user.get());
+        BaseReview review = new BaseReview(createReviewDTO.getReviewText(), date, product.get(), funfact, rating, user.get());
 
         review = repository.save(review);
 
@@ -81,14 +84,14 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<ReviewDTO> getReviewsOfProduct(String sku, String status, Long userID) {
 
-        Optional<Product> product = pRepository.findBySku(sku);
+        Optional<BaseProduct> product = pRepository.findBySku(sku);
         if( product.isEmpty() ) return null;
 
-        Optional<List<Review>> r = repository.findByProductIdStatus(product.get(), status);
+        List<BaseReview> r = repository.findByProductIdStatus(product.get(), status);
 
         if (r.isEmpty()) return null;
         
-        final var sortedReviews = reviewSorting.sortReviews(r.get(), userID);
+        final var sortedReviews = reviewSorting.sortReviews(r, userID);
 
         return ReviewMapper.toDtoList(sortedReviews);
     }
@@ -96,7 +99,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public boolean addVoteToReview(Long reviewID, VoteReviewDTO voteReviewDTO) {
 
-        Optional<Review> review = this.repository.findById(reviewID);
+        Optional<BaseReview> review = this.repository.findById(reviewID);
 
         if (review.isEmpty()) return false;
 
@@ -104,13 +107,13 @@ public class ReviewServiceImpl implements ReviewService {
         if (voteReviewDTO.getVote().equalsIgnoreCase("upVote")) {
             boolean added = review.get().addUpVote(vote);
             if (added) {
-                Review reviewUpdated = this.repository.save(review.get());
+                BaseReview reviewUpdated = this.repository.save(review.get());
                 return reviewUpdated != null;
             }
         } else if (voteReviewDTO.getVote().equalsIgnoreCase("downVote")) {
             boolean added = review.get().addDownVote(vote);
             if (added) {
-                Review reviewUpdated = this.repository.save(review.get());
+                BaseReview reviewUpdated = this.repository.save(review.get());
                 return reviewUpdated != null;
             }
         }
@@ -118,34 +121,34 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Double getWeightedAverage(Product product){
+    public Double getWeightedAverage(BaseProduct product){
 
-        Optional<List<Review>> r = repository.findByProductId(product);
+        List<BaseReview> r = repository.findByProductId(product);
 
         if (r.isEmpty()) return 0.0;
 
         double sum = 0;
 
-        for (Review rev: r.get()) {
-            Rating rate = rev.getRating();
+        for (BaseReview rev: r) {
+            BaseRating rate = rev.getRating();
 
             if (rate != null){
                 sum += rate.getRate();
             }
         }
 
-        return sum/r.get().size();
+        return sum/r.size();
     }
 
     @Override
     public Boolean DeleteReview(Long reviewId)  {
 
-        Optional<Review> rev = repository.findById(reviewId);
+        Optional<BaseReview> rev = repository.findById(reviewId);
 
         if (rev.isEmpty()){
             return null;
         }
-        Review r = rev.get();
+        BaseReview r = rev.get();
 
         if (r.getUpVote().isEmpty() && r.getDownVote().isEmpty()) {
             repository.delete(r);
@@ -157,19 +160,20 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<ReviewDTO> findPendingReview(){
 
-        Optional<List<Review>> r = repository.findPendingReviews();
+        String PENDING_STATUS = "pending";
+        List<BaseReview> r = repository.findPendingReviews(PENDING_STATUS);
 
         if(r.isEmpty()){
             return null;
         }
 
-        return ReviewMapper.toDtoList(r.get());
+        return ReviewMapper.toDtoList(r);
     }
 
     @Override
     public ReviewDTO moderateReview(Long reviewID, String approved) throws ResourceNotFoundException, IllegalArgumentException {
 
-        Optional<Review> r = repository.findById(reviewID);
+        Optional<BaseReview> r = repository.findById(reviewID);
 
         if(r.isEmpty()){
             throw new ResourceNotFoundException("Review not found");
@@ -181,7 +185,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new IllegalArgumentException("Invalid status value");
         }
 
-        Review review = repository.save(r.get());
+        BaseReview review = repository.save(r.get());
 
         return ReviewMapper.toDto(review);
     }
@@ -194,10 +198,10 @@ public class ReviewServiceImpl implements ReviewService {
 
         if(user.isEmpty()) return null;
 
-        Optional<List<Review>> r = repository.findByUserId(user.get());
+        List<BaseReview> r = repository.findByUserId(user.get());
 
         if (r.isEmpty()) return null;
 
-        return ReviewMapper.toDtoList(r.get());
+        return ReviewMapper.toDtoList(r);
     }
 }

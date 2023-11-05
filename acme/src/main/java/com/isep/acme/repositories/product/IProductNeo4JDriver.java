@@ -1,6 +1,6 @@
 package com.isep.acme.repositories.product;
 
-import com.isep.acme.model.ProductNeo4J;
+import com.isep.acme.model.product.ProductNeo4J;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Component
 @Profile("neo4j")
-public interface INeo4JDriver extends Neo4jRepository<ProductNeo4J,Long> {
+public interface IProductNeo4JDriver extends Neo4jRepository<ProductNeo4J,Long> {
 
     @Query("MATCH(p:ProductNeo4J) WHERE p.designation =~ $designation RETURN p")
     List<ProductNeo4J> findByDesignation(String designation);

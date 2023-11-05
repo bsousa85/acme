@@ -1,6 +1,6 @@
 package com.isep.acme.controllers;
 
-import com.isep.acme.model.BaseProduct;
+import com.isep.acme.model.product.BaseProduct;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;

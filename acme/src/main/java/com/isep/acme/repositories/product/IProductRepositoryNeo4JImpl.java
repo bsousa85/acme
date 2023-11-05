@@ -1,7 +1,7 @@
 package com.isep.acme.repositories.product;
 
-import com.isep.acme.model.BaseProduct;
-import com.isep.acme.model.ProductNeo4J;
+import com.isep.acme.model.product.BaseProduct;
+import com.isep.acme.model.product.ProductNeo4J;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class IProductRepositoryNeo4JImpl implements IProductRepository {
 
     @Autowired
-    private INeo4JDriver neo4JDriver;
+    private IProductNeo4JDriver neo4JDriver;
 
     @Override
     public List<BaseProduct> findByDesignation(String designation) {

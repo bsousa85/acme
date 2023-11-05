@@ -1,6 +1,6 @@
 package com.isep.acme.repositories.product;
 
-import com.isep.acme.model.BaseProduct;
+import com.isep.acme.model.product.BaseProduct;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

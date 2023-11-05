@@ -43,5 +43,4 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Cacheable
     Optional<User> findByUsername(String username);
 
-
 }

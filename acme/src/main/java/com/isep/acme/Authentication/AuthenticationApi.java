@@ -1,5 +1,6 @@
 package com.isep.acme.Authentication;
 
+import com.isep.acme.model.user.BaseUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -50,7 +51,7 @@ public class AuthenticationApi {
             final Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
-            final User user = (User) authentication.getPrincipal();
+            final BaseUser user = (BaseUser) authentication.getPrincipal();
 
             final Instant now = Instant.now();
             final long expiry = 36000L;

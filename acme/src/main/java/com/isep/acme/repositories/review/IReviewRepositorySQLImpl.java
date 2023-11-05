@@ -6,6 +6,8 @@ import com.isep.acme.model.product.ProductSQL;
 import com.isep.acme.model.rating.RatingSQL;
 import com.isep.acme.model.review.BaseReview;
 import com.isep.acme.model.review.ReviewSQL;
+import com.isep.acme.model.user.UserMongo;
+import com.isep.acme.model.user.UserSQL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -58,9 +60,11 @@ public class IReviewRepositorySQLImpl implements IReviewRepository {
     public BaseReview save(BaseReview review) {
         final var product = review.getProduct();
         final var rating = review.getRating();
+        final var user = review.getUser();
         final var sqlProduct = new ProductSQL(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
         final var sqlRating = new RatingSQL(rating.getIdRating(), rating.getVersion(), rating.getRate());
-        final var sqlReview = new ReviewSQL(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), sqlProduct, sqlRating, review.getUser());
+        final var sqlUser = new UserSQL(user.getUsername(), user.getPassword(), user.getFullName(), user.getNif(), user.getMorada());
+        final var sqlReview = new ReviewSQL(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), sqlProduct, sqlRating, sqlUser);
         return sqlDriver.save(sqlReview).toBaseReview();
     }
 
@@ -78,9 +82,11 @@ public class IReviewRepositorySQLImpl implements IReviewRepository {
     public void delete(BaseReview review) {
         final var product = review.getProduct();
         final var rating = review.getRating();
+        final var user = review.getUser();
         final var sqlProduct = new ProductSQL(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
         final var sqlRating = new RatingSQL(rating.getIdRating(), rating.getVersion(), rating.getRate());
-        final var sqlReview = new ReviewSQL(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), sqlProduct, sqlRating, review.getUser());
+        final var sqlUser = new UserSQL(user.getUsername(), user.getPassword(), user.getFullName(), user.getNif(), user.getMorada());
+        final var sqlReview = new ReviewSQL(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), sqlProduct, sqlRating, sqlUser);
         sqlDriver.delete(sqlReview);
     }
 }

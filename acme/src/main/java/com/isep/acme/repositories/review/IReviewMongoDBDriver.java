@@ -28,6 +28,4 @@ public interface IReviewMongoDBDriver extends MongoRepository<ReviewMongo, Long>
 
     @Query("{user: ?0}")
     List<ReviewMongo> findByUserId(User user);
-
-    List<ReviewMongo> findAll();
 }

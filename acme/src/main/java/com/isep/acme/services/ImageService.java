@@ -1,48 +1,35 @@
 package com.isep.acme.services;
 
+import com.isep.acme.model.image.BaseImage;
+import com.isep.acme.repositories.image.IImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 
 import com.isep.acme.model.ImageDTO;
-import com.isep.acme.model.ProdImage;
-import com.isep.acme.repositories.ImageRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ImageService {
 
     @Autowired
-    private Resource image;
+    private FileStorageService service;
     @Autowired
-     private ProdImage id;
-     @Autowired
-     private FileStorageService service;
-     @Autowired
-     private ImageRepository repository;
-    private String filename;
-
+    private IImageRepository repository;
 
     public Iterable<ImageDTO> getImageProduct(){
-          Iterable<ProdImage> p = repository.findAll();
-          List<ImageDTO> iDto= new ArrayList();
-          for (ProdImage pd:p) {
+          Iterable<BaseImage> p = repository.findAll();
+          List<ImageDTO> iDto= new ArrayList<>();
+          for (BaseImage pd : p) {
                iDto.add(pd.toDto());
           }
 
           return iDto;
      };
 
-    public <ProdImage> Resource addImage(Resource image){
-
-        this.image =  service.loadFileAsResource(filename);
-        return image;
+    public Resource addImage(Resource image){
+        return service.loadFileAsResource(image.getFilename());
      }
-
-
-
-
-
-
-
 }

@@ -1,5 +1,7 @@
 package com.isep.acme.services;
 
+import com.isep.acme.model.product.BaseProduct;
+import com.isep.acme.repositories.product.IProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -7,11 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.isep.acme.model.Product;
 import com.isep.acme.property.FileStorageException;
 import com.isep.acme.property.FileStorageProperties;
 import com.isep.acme.property.MyFileNotFoundException;
-import com.isep.acme.repositories.ProductRepository;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -24,9 +24,9 @@ import java.util.Optional;
 @Service
 public class FileStorageService {
     private final Path fileStorageLocation;
-    private ProductRepository repository;
+    private IProductRepository repository;
 
-    public Optional<Product> findByID(final Long id) {
+    public Optional<BaseProduct> findByID(final Long id) {
         return repository.findById( id);
     }
 
@@ -63,7 +63,7 @@ public class FileStorageService {
         }
     }
 
-    public Resource loadFileAsResource( String fileName) {
+    public Resource loadFileAsResource(String fileName) {
         try {
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());

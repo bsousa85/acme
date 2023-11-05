@@ -1,6 +1,9 @@
 package com.isep.acme.controllers;
 
-
+import com.isep.acme.model.image.BaseImage;
+import com.isep.acme.model.product.BaseProduct;
+import com.isep.acme.repositories.image.IImageRepository;
+import com.isep.acme.repositories.product.IProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.isep.acme.model.ProdImage;
-import com.isep.acme.model.Product;
 import com.isep.acme.property.UploadFileResponse;
-import com.isep.acme.repositories.ImageRepository;
-import com.isep.acme.repositories.ProductRepository;
 import com.isep.acme.services.FileStorageService;
 
 import java.util.Arrays;
@@ -32,20 +31,20 @@ public class FileController {
     private FileStorageService fileStorageService;
 
     @Autowired
-    private ImageRepository iRepo;
+    private IImageRepository iRepo;
 
     @Autowired
-    private ProductRepository pRepo;
+    private IProductRepository pRepo;
 
 
     @GetMapping(value = "/fileid/{id}")
-    public ResponseEntity<ProdImage> findById(@PathVariable("id") final Long id){
+    public ResponseEntity<BaseImage> findById(@PathVariable("id") final Long id){
 
-        final var prodImage = iRepo.findById(id)
+        final var baseImage = iRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, " Not Found"));
 
 
-        return  ResponseEntity.ok().body(prodImage);
+        return  ResponseEntity.ok().body(baseImage);
     }
 
     @PostMapping("/uploadFile")
@@ -70,7 +69,7 @@ public class FileController {
     }
 
     @GetMapping(value = "/ID/{productID}")
-    public ResponseEntity<Product> findByID(@PathVariable("productID") final Long productID){
+    public ResponseEntity<BaseProduct> findByID(@PathVariable("productID") final Long productID){
         final var product = pRepo.findById(productID)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found"));
 

@@ -1,6 +1,6 @@
 package com.isep.acme.controllers;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +10,10 @@ import com.isep.acme.services.UserService;
 
 @RestController
 @RequestMapping(path = "/admin/user")
-@RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/{userId}")
     public UserView getUser(@PathVariable final Long userId) {

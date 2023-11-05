@@ -4,6 +4,7 @@ import com.isep.acme.model.product.ProductMongo;
 import com.isep.acme.model.User;
 import com.isep.acme.model.Vote;
 import com.isep.acme.model.rating.RatingMongo;
+import com.isep.acme.model.user.UserMongo;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -40,7 +41,8 @@ public class ReviewMongo {
     @DBRef
     private ProductMongo product;
 
-    private User user;
+    @DBRef
+    private UserMongo user;
 
     @DBRef
     private RatingMongo rating;
@@ -56,7 +58,7 @@ public class ReviewMongo {
         setFunFact(funFact);
     }
 
-    public ReviewMongo(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, ProductMongo product, RatingMongo rating, User user) {
+    public ReviewMongo(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, ProductMongo product, RatingMongo rating, UserMongo user) {
         this(idReview, version, approvalStatus, reviewText, publishingDate, funFact);
 
         setUpVote(upVote);
@@ -68,7 +70,7 @@ public class ReviewMongo {
 
     }
 
-    public ReviewMongo(final String reviewText, LocalDate publishingDate, ProductMongo product, String funFact, RatingMongo rating, User user) {
+    public ReviewMongo(final String reviewText, LocalDate publishingDate, ProductMongo product, String funFact, RatingMongo rating, UserMongo user) {
         setReviewText(reviewText);
         setProduct(product);
         setPublishingDate(publishingDate);
@@ -150,11 +152,11 @@ public class ReviewMongo {
         return product;
     }
 
-    public User getUser() {
+    public UserMongo getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserMongo user) {
         this.user = user;
     }
 
@@ -210,6 +212,6 @@ public class ReviewMongo {
     }
 
     public BaseReview toBaseReview() {
-        return new BaseReview(this.idReview, this.version, this.approvalStatus, this.reviewText, this.upVote, this.downVote, this.report, this.publishingDate, this.funFact, this.product.toBaseProduct(), this.rating.toBaseRating(), this.user);
+        return new BaseReview(this.idReview, this.version, this.approvalStatus, this.reviewText, this.upVote, this.downVote, this.report, this.publishingDate, this.funFact, this.product.toBaseProduct(), this.rating.toBaseRating(), this.user.toBaseUser());
     }
 }

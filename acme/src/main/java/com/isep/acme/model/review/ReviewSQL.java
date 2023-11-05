@@ -4,6 +4,7 @@ import com.isep.acme.model.product.ProductSQL;
 import com.isep.acme.model.User;
 import com.isep.acme.model.Vote;
 import com.isep.acme.model.rating.RatingSQL;
+import com.isep.acme.model.user.UserSQL;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -61,7 +62,7 @@ public class ReviewSQL {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private UserSQL user;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
     private RatingSQL rating;
@@ -77,7 +78,7 @@ public class ReviewSQL {
         setFunFact(funFact);
     }
 
-    public ReviewSQL(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, ProductSQL product, RatingSQL rating, User user) {
+    public ReviewSQL(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, ProductSQL product, RatingSQL rating, UserSQL user) {
         this(idReview, version, approvalStatus, reviewText, publishingDate, funFact);
 
         setUpVote(upVote);
@@ -89,7 +90,7 @@ public class ReviewSQL {
 
     }
 
-    public ReviewSQL(final String reviewText, LocalDate publishingDate, ProductSQL product, String funFact, RatingSQL rating, User user) {
+    public ReviewSQL(final String reviewText, LocalDate publishingDate, ProductSQL product, String funFact, RatingSQL rating, UserSQL user) {
         setReviewText(reviewText);
         setProduct(product);
         setPublishingDate(publishingDate);
@@ -171,11 +172,11 @@ public class ReviewSQL {
         return product;
     }
 
-    public User getUser() {
+    public UserSQL getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserSQL user) {
         this.user = user;
     }
 
@@ -231,6 +232,6 @@ public class ReviewSQL {
     }
 
     public BaseReview toBaseReview() {
-        return new BaseReview(this.idReview, this.version, this.approvalStatus, this.reviewText, this.upVote, this.downVote, this.report, this.publishingDate, this.funFact, this.product.toBaseProduct(), this.rating.toBaseRating(), this.user);
+        return new BaseReview(this.idReview, this.version, this.approvalStatus, this.reviewText, this.upVote, this.downVote, this.report, this.publishingDate, this.funFact, this.product.toBaseProduct(), this.rating.toBaseRating(), this.user.toBaseUser());
     }
 }

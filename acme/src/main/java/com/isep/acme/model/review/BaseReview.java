@@ -1,9 +1,9 @@
 package com.isep.acme.model.review;
 
 import com.isep.acme.model.product.BaseProduct;
-import com.isep.acme.model.User;
 import com.isep.acme.model.Vote;
 import com.isep.acme.model.rating.BaseRating;
+import com.isep.acme.model.user.BaseUser;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class BaseReview {
 
     private BaseProduct product;
 
-    private User user;
+    private BaseUser user;
 
     private BaseRating rating;
 
@@ -59,7 +59,7 @@ public class BaseReview {
         setFunFact(funFact);
     }
 
-    public BaseReview(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, BaseProduct product, BaseRating rating, User user) {
+    public BaseReview(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, BaseProduct product, BaseRating rating, BaseUser user) {
         this(idReview, version, approvalStatus, reviewText, publishingDate, funFact);
 
         setUpVote(upVote);
@@ -71,7 +71,7 @@ public class BaseReview {
 
     }
 
-    public BaseReview(final String reviewText, LocalDate publishingDate, BaseProduct product, String funFact, BaseRating rating, User user) {
+    public BaseReview(final String reviewText, LocalDate publishingDate, BaseProduct product, String funFact, BaseRating rating, BaseUser user) {
         setReviewText(reviewText);
         setProduct(product);
         setPublishingDate(publishingDate);
@@ -153,11 +153,11 @@ public class BaseReview {
         return product;
     }
 
-    public User getUser() {
+    public BaseUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(BaseUser user) {
         this.user = user;
     }
 

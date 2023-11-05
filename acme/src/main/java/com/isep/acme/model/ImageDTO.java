@@ -1,11 +1,7 @@
 package com.isep.acme.model;
 
-import com.isep.acme.services.ImageService;
-
 public class ImageDTO {
 
-
-    private ImageService service;
     private Long id;
 
     private Long productID;
@@ -33,5 +29,4 @@ public class ImageDTO {
         this.id = id;
     }
 
-    public Iterable<ImageDTO> getImageProduct(){return service.getImageProduct();}
 }
